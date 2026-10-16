@@ -64,8 +64,16 @@ Perguntas que guiam o preenchimento (uma por dimensão):
 -->
 **Quando se preenche:** no Laboratório 02, no sábado (encontro 2).
 
-[uma linha por dimensão: a classificação e a frase de
-justificativa — começando por observabilidade e determinismo]
+
+| Dimensão | Classificação | Justificativa | O que obriga no projeto |
+|---|---|---|---|
+| Observabilidade | Parcialmente observável | A condição real da máquina, o histórico de intervenções e o procedimento da equipe não chegam nos sensores | Estado interno; memória e contexto |
+| Número de agentes | Multiagente | O técnico decide a última palavra e reage ao parecer, e o supervisor audita depois | Protocolo de comunicação e previsão do outro |
+| Determinismo | Estocástico | Falha é rara e multicausal, e o parecer gerado por modelo de linguagem varia | Valor esperado, nova tentativa, tempo máximo |
+| Episódico ou sequencial | Episódico | Cada ordem de serviço é avaliada independente das outras | Avaliação por conjunto de casos independentes |
+| Estático ou dinâmico | Semidinâmico | A ordem não muda sozinha, mas a espera atrasa a intervenção | Prazo de resposta e resposta parcial aceitável |
+| Discreto ou contínuo | Discreto | Risco, normas e LOTO são conjuntos contáveis | Enumeração direta |
+| Conhecido ou desconhecido | Conhecido | As NRs e os modos de falha são documentados | Sem fase de exploração |
 
 ---
 
