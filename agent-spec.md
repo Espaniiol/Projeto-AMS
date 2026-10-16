@@ -166,5 +166,15 @@ Perguntas que guiam o preenchimento:
 -->
 **Quando se preenche:** no Laboratório 03, sábado à tarde (encontro 2).
 
-[os cinco componentes do seu subproblema: estado inicial,
-ações, transição, teste de objetivo, custo]
+A fatia do problema que é busca: **em que ordem fazer as verificações de uma ordem de serviço** antes de classificar o risco da máquina — o subproblema 1 do catálogo, com os dados do AMS. 
+Os cinco componentes:
+
+| Componente | No AMS |
+|---|---|
+| Estado inicial | Nenhuma verificação feita |
+| Ações | Fazer a próxima verificação ainda não feita (desgaste, temperatura, potência, desgaste x torque, histórico, descrição, tipo de produto) |
+| Transição | Soma a verificação às feitas; se positiva, soma também às positivas |
+| Teste de objetivo | As quatro verificações essenciais, que distinguem os modos TWF, HDF, PWF e OSF, todas feitas |
+| Custo | O tempo de cada verificação, em minutos |
+
+O estado é o par (feitas, positivas), cada um como tupla ordenada — a situação, nunca a ordem em que as verificações foram feitas. O que **não** é busca no AMS: a decisão de exigir LOTO é regra, e comunicar o parecer ao técnico é política. A formulação está em `docs/d02/lab03-busca/meu_problema.py` e passa nas seis verificações do teste de sanidade.
