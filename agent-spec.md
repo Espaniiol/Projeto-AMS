@@ -149,8 +149,20 @@ Perguntas que guiam o preenchimento:
 **Quando se preenche:** na Atividade Orientada — o pacote `D2-07` traz o
 modelo da tabela e dois exemplos preenchidos.
 
-[tabela: nome · entrada · saída · é reversível? · risco se
-errar — ações de leitura e de escrita]
+| Ação | Entrada | Saída | É reversível? | Risco se errar |
+|---|---|---|---|---|
+| Ler a ordem de serviço | Número da ordem | Máquina, leitura dos sensores, descrição da intervenção | Sim, só lê | Leitura trocada ou descrição ambígua leva a uma avaliação errada |
+| Consultar o histórico de falhas da máquina | Product ID | Falhas por modo e intervenções anteriores | Sim, só lê | Histórico ausente ou desatualizado faz a máquina crônica parecer saudável |
+| Consultar a norma aplicável | Tipo de intervenção | Trechos da NR-10, NR-12 ou NR-35 | Sim, só lê | Norma errada ou versão antiga gera checklist incorreto |
+| Classificar o risco de falha | Leitura, histórico e tipo de produto | Nível (baixo, médio, alto) e confiança | Sim, só computa | Falso negativo: máquina prestes a falhar aparece como segura. Falso positivo: parada sem necessidade |
+| Recomendar bloqueio e etiquetagem (LOTO) | Ordem, risco e normas | Recomendação sim ou não, com justificativa | Não: se o técnico confia e trabalha com a máquina energizada, a exposição não se desfaz | Dispensar o LOTO por engano expõe o técnico a choque ou esmagamento |
+| Comunicar o parecer ao técnico | Classificação, normas e LOTO | Mensagem curta e justificada | Parcialmente: o parecer pode ser corrigido, mas o técnico já pode ter agido | Parecer confiante demais ou sem justificativa é seguido sem questionamento |
+| Escalar ao supervisor de segurança | Ordem, o que foi verificado e o motivo | Chamado aberto | Sim, escala-se de volta | Fadiga de alertas; escalar sem histórico duplica o trabalho |
+| Registrar a recomendação para auditoria | Parecer, entradas e versão | Registro gravado | Parcialmente: o registro é imutável de propósito, e a correção entra como novo registro | Registro sem justificativa inviabiliza a auditoria, e dado pessoal no log fere a LGPD |
+
+**Quem executa cada ação:** o agente sozinho executa as leituras e consultas (ler a ordem, consultar o histórico e a norma), classificar o risco, escalar ao supervisor e registrar para auditoria. O agente recomenda e o técnico decide em recomendar o LOTO e comunicar o parecer, porque a decisão final é do técnico. Só humano executa qualquer ação física na máquina.
+
+**O que o agente jamais executa sozinho:** autorizar ou liberar uma intervenção sem bloqueio e etiquetagem, e parar a máquina no sistema de ordens sem confirmação humana. Os dois têm efeito que não se desfaz: lesão do técnico ou perda de produção.
 
 ---
 
