@@ -1,0 +1,6 @@
+Métrica primária: falhas antecipadas (falhas classificadas como risco alto, sobre o total de falhas)
+Valor: 9/11 = 0,818 (81,8%)
+Conjunto: casos-baseline.csv, 30 casos sintéticos (11 com falha, 19 sem falha), incluindo casos fáceis, difíceis e 4 atípicos
+
+Onde o agente erra: ele perde as duas falhas que não deixam rastro nos sensores (C27, falha aleatória, e C28, falha sem modo registrado) e dispara alarme falso nos quatro casos com desgaste entre 202 e 238 min sem falha (C19 a C22).
+Por quê: com limiares fixos e sem memória, ele só enxerga o que o sensor mostra naquela leitura e não distingue a ferramenta desgastada que vai falhar da que não vai; o histórico da máquina, que o AI4I não traz, é o que um agente baseado em modelo (D10) precisaria acrescentar.

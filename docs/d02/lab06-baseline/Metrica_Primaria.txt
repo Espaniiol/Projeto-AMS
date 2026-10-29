@@ -1,3 +1,0 @@
-Métrica primária: falhas antecipadas (falhas classificadas como risco alto, sobre o total de falhas)
-Valor: 9/11 = 0,818 (81,8%)
-Conjunto: casos-baseline.csv, 30 casos sintéticos (11 com falha, 19 sem falha), incluindo casos fáceis, difíceis e 4 atípicos
