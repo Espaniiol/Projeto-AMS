@@ -89,8 +89,13 @@ Perguntas que guiam o preenchimento:
 -->
 **Quando se preenche:** no sábado (encontro 2, manhã).
 
-[o tipo mais simples que resolve, justificado pela dimensão
-do ambiente que o obriga]
+**Baseado em modelo**, com estado interno por máquina (histórico de falhas e de intervenções). A observabilidade parcial (seção 2) elimina o reativo simples por construção: o que decide o risco de uma ordem, como o histórico da máquina, a condição real da ferramenta e o procedimento da equipe, não está na leitura de sensores do instante. O agente precisa guardar e consultar esse histórico entre uma ordem e outra.
+
+O reativo simples é a **linha de base**, e roda em `src/ams/baseline.py`: quatro regras de limiar, uma por modo de falha, sem estado. Ele é competitivo no AI4I (329 de 330 falhas antecipadas) porque os rótulos de HDF, PWF e OSF seguem as mesmas condições que as regras usam. Ele erra onde o ambiente exige memória: não antecipa falha aleatória nem falha sem modo registrado (C27 e C28) e dispara alarme em toda máquina com desgaste entre 200 e 240 min (C19 a C22).
+
+A única fatia que é busca é a ordem das verificações (seção 7), tratada por um agente baseado em objetivos. A decisão final de recomendar o bloqueio (LOTO) é regra.
+
+**O que mudou e por quê:** seção preenchida pela primeira vez. A escolha do tipo passou a se apoiar nos erros medidos da linha de base (Laboratório 6), e não só na caracterização do ambiente.
 
 ---
 
@@ -109,9 +114,13 @@ Perguntas que guiam o preenchimento:
 operacional completa — primária, secundárias, conjunto e limiar — é item da
 Atividade Orientada.
 
-[métrica primária e duas secundárias, cada uma com: como se
-calcula, sobre qual conjunto, qual o limiar de sucesso e o
-valor de hoje]
+**Primária: falhas antecipadas.** Como se calcula: entre as ordens de máquinas que falharam, contam-se as que o agente classificou como risco alto, e divide-se pelo total de ordens com falha. Conjunto: os 9.991 registros do AI4I 2020 (10.000 menos 9 com falha marcada sem nenhum modo), com 330 falhas; no desenvolvimento, os 30 casos rotulados de `data/casos/casos-baseline.csv`, com 11 falhas. Sucesso: acima de 80%. Hoje: a linha de base de quatro regras antecipa 329 de 330 (99,7%) na base real e 9 de 11 (81,8%) nos 30 casos; a melhor regra de um limiar (desgaste > 245 min) antecipa 4 de 330 (1,2%). Ressalva: no AI4I os rótulos de HDF, PWF e OSF seguem as mesmas condições que as regras usam, então o valor na base real é alto por construção.
+
+**Secundária 1: alarmes falsos.** Como se calcula: entre as ordens sem falha, a fração classificada como risco alto. Impede que "marcar tudo como alto" pontue na primária. Conjunto: o mesmo da primária. Sucesso: abaixo de 15%. Hoje: 678 de 9.661 (7,0%) na base real e 4 de 19 (21,1%) nos 30 casos, acima do limiar porque esse conjunto é enriquecido com casos de desgaste alto sem falha.
+
+**Secundária 2: intervenções liberadas sem recomendação de LOTO.** Como se calcula: contagem de ordens com intervenção elétrica ou em partes móveis cujo parecer não recomendou o bloqueio e etiquetagem. Conjunto: ordens de serviço com descrição da intervenção. Sucesso: zero. Hoje: não medido, porque o AI4I não traz descrição da intervenção nem registro de bloqueio; passa a ser medido quando houver ordens com texto.
+
+**O que mudou e por quê:** a fórmula do campo Performance (seção 1) ganhou o valor de hoje medido pela linha de base, antes só estimado por uma regra de um limiar, e as duas secundárias que correspondem aos termos contra a trapaça do PEAS. A secundária 2 foi marcada como não medida em vez de receber um número sem base.
 
 ---
 
@@ -128,9 +137,12 @@ Perguntas que guiam o preenchimento:
 -->
 **Quando se preenche:** na Atividade Orientada.
 
-[latência aceitável, custo aceitável, o que o agente jamais
-pode fazer sozinho, e a troca qualidade × custo que você
-aceita — com um exemplo numérico]
+- **Latência:** o parecer deve chegar ao técnico em até 30 segundos. O técnico tem pouco tempo entre uma ordem e outra e, passado esse prazo, começa a intervenção sem o parecer, que perde o valor.
+- **Custo:** até R$ 0,05 em chamadas de verificação e consulta por ordem de serviço.
+- **O que o agente jamais faz sozinho:** autorizar ou liberar uma intervenção sem bloqueio e etiquetagem (LOTO), e parar a máquina no sistema de ordens sem confirmação humana. Os dois têm efeito que não se desfaz: lesão do técnico ou perda de produção.
+- **Troca aceita:** aceito mais alarmes falsos para não perder falhas. Na base real, 15% de alarmes falsos são 1.449 paradas à toa em 9.661 ordens sem falha (hoje são 678). Aceito esse custo se com ele nenhuma das 330 falhas passar sem alarme, mas não aceito perder 4 falhas para cortar mil alarmes: uma falha perdida pode ferir um técnico, e um alarme falso custa alguns minutos de parada.
+
+**O que mudou e por quê:** seção preenchida pela primeira vez. A troca aceita foi escrita com os números da linha de base medida (678 alarmes falsos, 330 falhas), e o limite de alarmes falsos de 15% é o mesmo da seção 4.
 
 ---
 
@@ -299,4 +311,3 @@ class Diagnostico:
 
 MEU_PROBLEMA = Diagnostico(VERIFICACOES_AMS)
 ```
-
