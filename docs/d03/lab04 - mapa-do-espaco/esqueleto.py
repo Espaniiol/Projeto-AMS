@@ -124,7 +124,7 @@ def reduzir_vizinhanca(matriz: np.ndarray, semente: int) -> np.ndarray:
     de um ponto novo não existe sem refazer o mapa inteiro (slide 53).
     A semente é obrigatória e declarada: duas execuções com sementes
     diferentes dão figuras diferentes (slide 54)."""
-    return TSNE(n_components=2, init="random", random_state=semente,
+    return TSNE(n_components=2, init="pca", random_state=semente,
                 perplexity=PERPLEXIDADE).fit_transform(matriz)
 
 
